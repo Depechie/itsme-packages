@@ -47,10 +47,11 @@ class Address(object):
 
 
 class ItsmeSettings(object):
-    def __init__(self, client_id: str, redirect_uri: str, private_jwk_set: str):
+    def __init__(self, client_id: str, redirect_uri: str, private_jwk_set: str, app_environment: str):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.private_jwk_set = private_jwk_set
+        self.app_environment = app_environment
 
 
 class UrlConfiguration(object):
@@ -61,6 +62,8 @@ class UrlConfiguration(object):
 
 
 itsme_lib = None
+PRODUCTION = 'production'
+SANDBOX = 'e2e'
 
 
 class Client(object):

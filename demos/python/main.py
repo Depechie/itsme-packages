@@ -9,7 +9,8 @@ def _get_itsme_client():
         private_jwk_set = jwks_file.read()
     client_id = 'my_client_id'
     redirect_url = 'https://example.com/production/redirect'
-    settings = itsme.ItsmeSettings(client_id, redirect_url, private_jwk_set)
+    environment = itsme.PRODUCTION
+    settings = itsme.ItsmeSettings(client_id, redirect_url, private_jwk_set, environment)
     return itsme.Client(settings)
 
 @app.route("/login")
