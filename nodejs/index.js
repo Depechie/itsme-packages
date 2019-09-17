@@ -43,11 +43,12 @@ function createAddress(address) {
     }
 }
 
-function createItsmeSettings(clientId, redirectUri, privateJwkSet){
+function createItsmeSettings(clientId, redirectUri, privateJwkSet, environment){
     return {
         client_id: clientId,
         redirect_uri: redirectUri,
         private_jwk_set: privateJwkSet,
+        app_environment: environment,
     }
 }
 
