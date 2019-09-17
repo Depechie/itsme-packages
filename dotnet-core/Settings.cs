@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Itsme
 {
@@ -13,9 +14,19 @@ namespace Itsme
         [JsonProperty(PropertyName = "private_jwk_set")]
         public string PrivateJwkSet { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty(PropertyName = "app_environment")]
+        public ItsmeEnvironment Environment { get; set; }
+
         internal string ToJson()
         {
             return JsonConvert.SerializeObject(this);
         }
+    }
+
+    public enum ItsmeEnvironment
+    {
+        production,
+        e2e
     }
 }
