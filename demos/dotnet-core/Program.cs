@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Itsme;
 
 namespace dotnet_core_api
 {
@@ -15,7 +16,8 @@ namespace dotnet_core_api
             {
                 {"ClientID", "my_client_id"},
                 {"RedirectURI", "https://example.com/production/redirect"},
-                {"PrivateJWKSet", jwks}
+                {"PrivateJWKSet", jwks},
+                {"AppEnvironment", ItsmeSettings.Production}
             };
         }
 

@@ -16,6 +16,7 @@ namespace dotnet_core_api.Integrations
             settings.ClientId = config.GetValue<string>("ClientID", "not_found");
             settings.RedirectUri = config.GetValue<string>("RedirectURI", "not_found");
             settings.PrivateJwkSet = config.GetValue<string>("PrivateJWKSet", "not_found");
+            settings.Environment = config.GetValue<string>("AppEnvironment", "not_found");
             _itsmeClient = new Itsme.Client(settings);
         }
 
