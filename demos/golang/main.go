@@ -90,5 +90,5 @@ func main() {
 	http.HandleFunc("/production/jwks.json", servePublicKeys)
 	http.HandleFunc("/production/login", buildLoginURL)
 	http.HandleFunc("/production/redirect", handleRedirect)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Fatal(http.ListenAndServe(":8090", nil))
 }
