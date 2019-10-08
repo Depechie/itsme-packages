@@ -7,8 +7,8 @@ param(
 
 $origin = Get-Location
 Set-Location $PSScriptRoot
-$version = '0.0.4'
-$libVersion = '0.5.0.1563364026'
+$version = '0.0.5'
+$libVersion = '0.5.0.1570598667'
 
 function Clear-Output {
     Remove-Item obj -Recurse -Force -ErrorAction SilentlyContinue

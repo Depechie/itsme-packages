@@ -3,8 +3,8 @@ from setuptools import find_packages, setup
 from subprocess import call
 
 # Download ITSME libraries
-lib_version = '0.5.0.1563364026'
-version = '0.0.4'
+lib_version = '0.5.0.1570598667'
+version = '0.0.5'
 location = './itsme'
 
 if operating_system == 'nt':
