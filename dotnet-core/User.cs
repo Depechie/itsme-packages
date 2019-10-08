@@ -11,11 +11,14 @@ namespace Itsme
         [JsonProperty(PropertyName = "aud")]
         public string Aud { get; set; }
 
-        [JsonProperty(PropertyName = "tag:sixdots.be,2016-06:claim_eid")]
-        public TagSixdotsBe201606ClaimEid Eid { get; set; }
+        [JsonProperty(PropertyName = "eid")]
+        public Eid Eid { get; set; }
 
         [JsonProperty(PropertyName = "birthdate")]
         public string Birthdate { get; set; }
+
+        [JsonProperty(PropertyName = "city_of_birth")]
+        public string CityOfBirth { get; set; }
 
         [JsonProperty(PropertyName = "gender")]
         public string Gender { get; set; }
@@ -26,11 +29,11 @@ namespace Itsme
         [JsonProperty(PropertyName = "iss")]
         public string Iss { get; set; }
 
-        [JsonProperty(PropertyName = "phone_number_verified")]
-        public bool PhoneNumberVerified { get; set; }
-
         [JsonProperty(PropertyName = "phone_number")]
         public string PhoneNumber { get; set; }
+
+        [JsonProperty(PropertyName = "phone_number_verified")]
+        public bool PhoneNumberVerified { get; set; }
 
         [JsonProperty(PropertyName = "given_name")]
         public string GivenName { get; set; }
@@ -44,8 +47,17 @@ namespace Itsme
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "parsed_address")]
+        [JsonProperty(PropertyName = "email_verified")]
+        public bool EmailVerified { get; set; }
+
+        [JsonProperty(PropertyName = "address")]
         public Address ParsedAddress { get; set; }
+
+        [JsonProperty(PropertyName = "photo")]
+        public string Photo { get; set; }
+
+        [JsonProperty(PropertyName = "device")]
+        public Device Device { get; set; }
 
         internal static User FromJson(string json)
         {
@@ -53,16 +65,16 @@ namespace Itsme
         }
     }
 
-    public class TagSixdotsBe201606ClaimEid
+    public class Eid
     {
         [JsonProperty(PropertyName = "issuance_locality")]
         public string IssuanceLocality { get; set; }
 
-        [JsonProperty(PropertyName = "certificate_validity")]
-        public DateTime CertificateValidity { get; set; }
+        [JsonProperty(PropertyName = "national_number ")]
+        public DateTime NationalNumber { get; set; }
 
         [JsonProperty(PropertyName = "eid")]
-        public string Eid { get; set; }
+        public string Number { get; set; }
 
         [JsonProperty(PropertyName = "validity_to")]
         public DateTime ValidityTo { get; set; }
@@ -87,5 +99,53 @@ namespace Itsme
 
         [JsonProperty(PropertyName = "postal_code")]
         public string PostalCode { get; set; }
+    }
+
+    public class Device
+    {
+        [JsonProperty(PropertyName = "os")]
+        public string OS { get; set; }
+
+        [JsonProperty(PropertyName = "appName")]
+        public string AppName { get; set; }
+
+        [JsonProperty(PropertyName = "appRelease")]
+        public string AppRelease { get; set; }
+
+        [JsonProperty(PropertyName = "deviceLabel")]
+        public string DeviceLabel { get; set; }
+
+        [JsonProperty(PropertyName = "debugEnabled")]
+        public bool DebugEnabled { get; set; }
+
+        [JsonProperty(PropertyName = "deviceId")]
+        public string DeviceId { get; set; }
+
+        [JsonProperty(PropertyName = "osRelease")]
+        public string OSRelease { get; set; }
+
+        [JsonProperty(PropertyName = "manufacturer")]
+        public string Manufacturer { get; set; }
+
+        [JsonProperty(PropertyName = "hasSimEnabled")]
+        public bool HasSimEnabled { get; set; }
+
+        [JsonProperty(PropertyName = "deviceLockLevel")]
+        public string DeviceLockLevel { get; set; }
+
+        [JsonProperty(PropertyName = "smsEnabled")]
+        public bool SMSEnabled { get; set; }
+
+        [JsonProperty(PropertyName = "rooted")]
+        public bool Rooted { get; set; }
+
+        [JsonProperty(PropertyName = "deviceModel")]
+        public string DeviceModel { get; set; }
+
+        [JsonProperty(PropertyName = "msisdn")]
+        public string MSISDN { get; set; }
+
+        [JsonProperty(PropertyName = "sdkRelease")]
+        public string SDKRelease { get; set; }
     }
 }
