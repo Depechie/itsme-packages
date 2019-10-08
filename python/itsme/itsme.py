@@ -13,37 +13,73 @@ class Response(Structure):
 class Error(object):
     def __init__(self, json):
         error = loads(json)
-        self.message = (
-            error['message'] if 'message' in error else 'Could not parse error object'
-        )
+        self.message = error.get('message', 'Could not parse error object')
 
 
 class User(object):
     def __init__(self, json):
         user = loads(json)
-        self.sub = user['sub'] if 'sub' in user else ''
-        self.aud = user['aud'] if 'aud' in user else ''
-        self.birthdate = user['birthdate'] if 'birthdate' in user else ''
-        self.gender = user['gender'] if 'gender' in user else ''
-        self.name = user['name'] if 'name' in user else ''
-        self.iss = user['iss'] if 'iss' in user else ''
-        self.phone_number_verified = user['phone_number_verified'] if 'phone_number_verified' in user else ''
-        self.phone_number = user['phone_number'] if 'phone_number' in user else ''
-        self.given_name = user['given_name'] if 'given_name' in user else ''
-        self.family_name = user['family_name'] if 'family_name' in user else ''
-        self.locale = user['locale'] if 'locale' in user else ''
-        self.email = user['email'] if 'email' in user else ''
-        if 'parsed_address' in user:
-            self.address = Address(user['parsed_address'])
+        self.aud = user.get('aud', '')
+        self.email = user.get('email', '')
+        self.email_verified = user.get('email_verified', '')
+        self.phone_number = user.get('phone_number', '')
+        self.phone_number_verified = user.get('phone_number_verified', '')
+        self.family_name = user.get('family_name', '')
+        self.gender = user.get('gender', '')
+        self.given_name = user.get('given_name', '')
+        self.iss = user.get('iss', '')
+        self.locale = user.get('locale', '')
+        self.name = user.get('name', '')
+        self.sub = user.get('sub', '')
+        self.birthdate = user.get('birthdate', '')
+        self.city_of_birth = user.get('city_of_birth', '')
+        if 'eid' in user:
+            self.eid = Eid(user['eid'])
+        if 'address' in user:
+            self.address = Address(user['address'])
+        self.birthdate = user.get('birthdate', '')
+        if 'device' in user:
+            self.address = Device(user['device'])
 
 
 class Address(object):
     def __init__(self, json):
         address = loads(json)
-        self.country = address['country'] if 'country' in address else ''
-        self.street_address = address['street_address'] if 'street_address' in address else ''
-        self.locality = address['locality'] if 'locality' in address else ''
-        self.postal_code = address['postal_code'] if 'postal_code' in address else ''
+        self.country = address.get('country', '')
+        self.street_address = address.get('street_address', '')
+        self.locality = address.get('locality', '')
+        self.postal_code = address.get('postal_code', '')
+
+
+class Eid(object):
+    def __init__(self, json):
+        eid = loads(json)
+        self.eid = eid.get('eid', '')
+        self.issuance_locality = eid.get('issuance_locality', '')
+        self.national_number = eid.get('national_number', '')
+        self.read_date = eid.get('read_date', '')
+        self.validity_from = eid.get('validity_from', '')
+        self.validity_to = eid.get('validity_to', '')
+
+
+class Device(object):
+    def __init__(self, json):
+        device = loads(json)
+        self.os = device.get('os', '')
+        self.app_name = device.get('appName', '')
+        self.app_release = device.get('appRelease', '')
+        self.device_label = device.get('deviceLabel', '')
+        self.debug_enabled = device.get('debugEnabled', '')
+        self.device_id = device.get('deviceId', '')
+        self.os_release = device.get('osRelease', '')
+        self.manufacturer = device.get('manufacturer', '')
+        self.has_sim_enabled = device.get('hasSimEnabled', '')
+        self.device_lock_level = device.get('deviceLockLevel', '')
+        self.sms_enabled = device.get('smsEnabled', '')
+        self.rooted = device.get('rooted', '')
+        self.device_model = device.get('deviceModel', '')
+        self.msisdn = device.get('msisdn', '')
+        self.sdk_release = device.get('sdkRelease', '')
 
 
 class ItsmeSettings(object):
