@@ -6,6 +6,7 @@
 
 db/
 .vscode/
+dotnet-core/nupkgs/
 
 ### C ###
 # Prerequisites
