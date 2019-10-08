@@ -1,4 +1,5 @@
 from flask import Flask, Response, request, jsonify
+from json import dumps
 import itsme
 
 app = Flask(__name__)
@@ -13,11 +14,11 @@ def _get_itsme_client():
     settings = itsme.ItsmeSettings(client_id, redirect_url, private_jwk_set, environment)
     return itsme.Client(settings)
 
-@app.route("/login")
+@app.route("/production/login")
 def login():
-    config = itsme.UrlConfiguration(['profile', 'email'], 'my_service_code', '')
+    request_uri = 'https://example.com:443/production/request_uri'
+    config = itsme.UrlConfiguration(['profile', 'email', 'address', 'phone'], 'my_service_code', request_uri)
     itsme_auth_url = _get_itsme_client().get_authentication_url(config)
-    print('Auth URL: ' + itsme_auth_url)
     body = {
         'url': itsme_auth_url
     }
@@ -25,7 +26,7 @@ def login():
     return resp
 
 
-@app.route("/jwks.json")
+@app.route("/production/jwks.json")
 def hello():
     jwks = ""
     with open('../keys/jwks_public.json') as f:
@@ -35,11 +36,13 @@ def hello():
     return resp
 
 
-@app.route("/redirect")
+@app.route("/production/redirect")
 def redirect():
     code = request.args.get('code')
     user = _get_itsme_client().get_user_details(code)
-    return user
+    resp = Response(dumps(user.__dict__, default=lambda o: o.__dict__))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
 
 
 if __name__ == '__main__':

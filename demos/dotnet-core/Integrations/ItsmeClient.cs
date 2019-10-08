@@ -24,7 +24,8 @@ namespace dotnet_core_api.Integrations
         {
             var urlSettings = new Itsme.UrlConfiguration();
             urlSettings.ServiceCode = "MY_SERVICE_CODE";
-            urlSettings.Scopes = new string[]{"profile", "email", "address", "phone", "eid"};
+            urlSettings.Scopes = new string[]{"profile", "email", "address", "phone"};
+            urlSettings.RequestUri = "https://example.com:443/production/request_uri";
             return _itsmeClient.GetAuthenticationURL(urlSettings);
         }
 

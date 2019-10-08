@@ -30,8 +30,9 @@ func buildLoginURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	config := itsme.URLConfiguration{
-		Scopes:      []string{"profile", "email", "address", "phone", "eid"},
-		ServiceCode: "BMIDITP_LOGIN",
+		Scopes:      []string{"profile", "email", "address", "phone"},
+		ServiceCode: "MY_SERVICE_CODE",
+		RequestURI:  "https://example.com:443/production/request_uri",
 	}
 	url, err := itsmeClient.GetAuthenticationURL(config)
 	if err != nil {
@@ -75,12 +76,13 @@ func getItsmeClient() (*itsme.Itsme, error) {
 	if err != nil {
 		return nil, err
 	}
-	settings := itsme.ItsmeSettings{
-		ClientID:      "my_client_id",
-		RedirectURI:   "https://example.com/production/redirect",
-		PrivateJWKSet: string(jwks),
+	settings := itsme.Settings{
+		ClientID:       "my_client_id",
+		RedirectURI:    "https://example.com/production/redirect",
+		PrivateJWKSet:  string(jwks),
+		AppEnvironment: itsme.PRODUCTION,
 	}
-	return itsme.NewItsmeClient(settings), nil
+	return itsme.NewItsmeClient(&settings), nil
 }
 
 func main() {
