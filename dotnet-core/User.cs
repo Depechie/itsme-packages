@@ -71,7 +71,7 @@ namespace Itsme
         public string IssuanceLocality { get; set; }
 
         [JsonProperty(PropertyName = "national_number ")]
-        public DateTime NationalNumber { get; set; }
+        public string NationalNumber { get; set; }
 
         [JsonProperty(PropertyName = "eid")]
         public string Number { get; set; }
