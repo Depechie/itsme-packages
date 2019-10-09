@@ -7,7 +7,7 @@ param(
 
 $origin = Get-Location
 Set-Location $PSScriptRoot
-$version = '0.0.6'
+$version = '0.0.7'
 $libVersion = '0.5.0.1570598667'
 
 function Clear-Output {
