@@ -70,7 +70,7 @@ namespace Itsme
         [JsonProperty(PropertyName = "issuance_locality")]
         public string IssuanceLocality { get; set; }
 
-        [JsonProperty(PropertyName = "national_number ")]
+        [JsonProperty(PropertyName = "national_number")]
         public string NationalNumber { get; set; }
 
         [JsonProperty(PropertyName = "eid")]
