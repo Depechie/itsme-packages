@@ -77,13 +77,13 @@ namespace Itsme
         public string Number { get; set; }
 
         [JsonProperty(PropertyName = "validity_to")]
-        public DateTime ValidityTo { get; set; }
+        public DateTime? ValidityTo { get; set; }
 
         [JsonProperty(PropertyName = "validity_from")]
-        public DateTime ValidityFrom { get; set; }
+        public DateTime? ValidityFrom { get; set; }
 
         [JsonProperty(PropertyName = "read_date")]
-        public DateTime ReadDate { get; set; }
+        public DateTime? ReadDate { get; set; }
     }
 
     public class Address
