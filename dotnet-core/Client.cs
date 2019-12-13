@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using System;
 using System.IO;
 
 namespace Itsme
@@ -8,7 +7,7 @@ namespace Itsme
     {
         public Client()
         {
-            Environment.CurrentDirectory = Directory.GetCurrentDirectory();
+            System.Environment.CurrentDirectory = Directory.GetCurrentDirectory();
         }
 
         public Client(ItsmeSettings settings) : base()
@@ -18,7 +17,7 @@ namespace Itsme
 
         private void Init(ItsmeSettings settings)
         {
-            Console.WriteLine(Directory.GetCurrentDirectory());
+            System.Console.WriteLine(Directory.GetCurrentDirectory());
             var response = Wrapper.Init(settings.ToJson());
             var err = Marshal.PtrToStringAnsi(response);
             if (err == null)

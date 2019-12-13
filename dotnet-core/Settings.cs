@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Itsme
 {
@@ -14,7 +15,7 @@ namespace Itsme
         public string PrivateJwkSet { get; set; }
 
         [JsonProperty(PropertyName = "app_environment")]
-        public string Environment { get; set; }
+        public Environment Environment { get; set; }
 
         internal string ToJson()
         {
@@ -23,5 +24,11 @@ namespace Itsme
 
         public const string Production = "production";
         public const string Sandbox = "e2e";
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum Environment {
+        production,
+        e2e
     }
 }
