@@ -47,5 +47,16 @@ namespace Itsme
             var error = Error.FromJson(err);
             throw new ItsmeException(error);
         }
+
+        public string CreateRequestURIPayload(RequestUriConfiguration config)
+        {
+            var response = Wrapper.CreateRequestURIPayload(config.ToJson());
+            var jwt = Marshal.PtrToStringAnsi(response.r0);
+            var err = Marshal.PtrToStringAnsi(response.r1);
+            if (err == null)
+                return jwt;
+            var error = Error.FromJson(err);
+            throw new ItsmeException(error);
+        }
     }
 }
