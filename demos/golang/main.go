@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/itsme-sdk/itsme-golang"
@@ -47,18 +48,29 @@ func buildLoginURL(w http.ResponseWriter, r *http.Request) {
 
 func handleRedirect(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
-	if code == "" {
+	state := r.URL.Query().Get("state")
+	if code == "" || state == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(w, "no code found on request")
+		fmt.Fprint(w, "no code/state found on request")
 		return
 	}
-	itsme, err := getItsmeClient()
+	itsmeClient, err := getItsmeClient()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err.Error())
 		return
 	}
-	user, err := itsme.GetUserDetails(code)
+	url, err := base64.StdEncoding.DecodeString(state)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "unable to decode state")
+		return
+	}
+	data := itsme.RedirectData{
+		Code:        code,
+		RedirectURI: string(url),
+	}
+	user, err := itsmeClient.GetUserDetails(data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, err.Error())
@@ -87,7 +99,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		},
 		AcrValue: itsme.ACRAdvanced,
 		Nonce:    "2345yhgfdswertyhgfds",
-		State:    "thisismyriflethisismygun",
+		State:    base64.StdEncoding.EncodeToString([]byte("https://backend.failforward.tech/production/redirect")),
 		Claims:   []itsme.Claim{itsme.ClaimCityOfBirth, itsme.ClaimEid, itsme.ClaimDevice, itsme.ClaimNationality, itsme.ClaimPhoto},
 	}
 	jwt, err := itsmeClient.CreateRequestURIPayload(config)
