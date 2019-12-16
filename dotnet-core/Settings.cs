@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -8,6 +9,7 @@ namespace Itsme
         [JsonProperty(PropertyName = "client_id")]
         public string ClientId { get; set; }
 
+        [ObsoleteAttribute("RedirectUri is deprecated, please use RedirectUri on UrlConfiguration instead.")]
         [JsonProperty(PropertyName = "redirect_uri")]
         public string RedirectUri { get; set; }
 
