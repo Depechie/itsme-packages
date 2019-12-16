@@ -37,9 +37,9 @@ namespace Itsme
             throw new ItsmeException(error);
         }
 
-        public User GetUserDetails(string token)
+        public User GetUserDetails(RedirectData redirectData)
         {
-            var response = Wrapper.GetUserDetails(token);
+            var response = Wrapper.GetUserDetails(redirectData.ToJson());
             var data = Marshal.PtrToStringAnsi(response.r0);
             var err = Marshal.PtrToStringAnsi(response.r1);
             if (err == null)

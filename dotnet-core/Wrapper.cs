@@ -14,7 +14,7 @@ namespace Itsme
         internal static extern Response GetAuthenticationURL(string config);
 
         [DllImport(ITSME_LIB, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern Response GetUserDetails(string authorizationCode);
+        internal static extern Response GetUserDetails(string redirectData);
 
         [DllImport(ITSME_LIB, CallingConvention = CallingConvention.Cdecl)]
         internal static extern Response CreateRequestURIPayload(string config);

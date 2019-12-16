@@ -6,7 +6,7 @@ namespace dotnet_core_api.Integrations
     public interface IItsmeClient
     {
         string GetLoginUrl();
-        Itsme.User GetUserDetails(string authorization_code);
+        Itsme.User GetUserDetails(string authorization_code, string state);
         string CreateRequestURIPayload();
     }
     public class ItsmeClient: IItsmeClient
@@ -36,9 +36,12 @@ namespace dotnet_core_api.Integrations
             return _itsmeClient.GetAuthenticationURL(urlSettings);
         }
 
-        public Itsme.User GetUserDetails(string authorization_code)
+        public Itsme.User GetUserDetails(string authorization_code, string state)
         {
-            return _itsmeClient.GetUserDetails(authorization_code);
+            var data = new Itsme.RedirectData();
+            data.Code = authorization_code;
+            data.RedirectUri = Base64Decode(state);
+            return _itsmeClient.GetUserDetails(data);
         }
 
         public string CreateRequestURIPayload()
@@ -55,12 +58,24 @@ namespace dotnet_core_api.Integrations
             requestSettings.RedirectUri = "https://example.com/production/redirect";
             requestSettings.AcrValue = Itsme.AcrValue.ACRAdvanced;
             requestSettings.Nonce = "noncesense";
-            requestSettings.State = "noncesense";
+            requestSettings.State = Base64Encode(requestSettings.RedirectUri);
             requestSettings.Claims = new List<Itsme.Claim>(){
                 Itsme.Claim.ClaimEid,
                 Itsme.Claim.ClaimCityOfBirth
             };
             return _itsmeClient.CreateRequestURIPayload(requestSettings);
+        }
+
+        private string Base64Encode(string plainText) {
+            if (plainText == null) return "";
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        private string Base64Decode(string base64EncodedData) {
+            if (base64EncodedData == null) return "";
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

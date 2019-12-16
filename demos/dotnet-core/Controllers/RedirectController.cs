@@ -14,9 +14,9 @@ namespace dotnet_core_api.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<Itsme.User> Get([FromQuery(Name = "code")] string code)
+        public ActionResult<Itsme.User> Get([FromQuery(Name = "code")] string code, [FromQuery(Name = "state")] string state)
         {
-            return _itsmeClient.GetUserDetails(code);
+            return _itsmeClient.GetUserDetails(code, state);
         }
     }
 }
