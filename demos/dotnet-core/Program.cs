@@ -22,7 +22,7 @@ namespace dotnet_core_api
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
-                .UseUrls("http://localhost:8090/")
+                .UseUrls("http://*:8090")
                 .Build()
                 .Run();
         }
