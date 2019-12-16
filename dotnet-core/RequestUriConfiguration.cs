@@ -7,10 +7,10 @@ namespace Itsme
     public class RequestUriConfiguration: UrlConfiguration
     {
         [JsonProperty(PropertyName = "acr_value")]
-        public string ACRValue { get; set; }
+        public AcrValue AcrValue { get; set; }
 
         [JsonProperty(PropertyName = "nonce")]
-        public string None { get; set; }
+        public string Nonce { get; set; }
 
         [JsonProperty(PropertyName = "state")]
         public string State { get; set; }
@@ -26,5 +26,12 @@ namespace Itsme
         ClaimNationality,
         ClaimDevice,
         ClaimPhoto
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum AcrValue {
+        ACRBasic,
+        ACRAdvanced,
+        ACRSecured
     }
 }
