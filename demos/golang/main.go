@@ -33,6 +33,7 @@ func buildLoginURL(w http.ResponseWriter, r *http.Request) {
 		Scopes:      []string{"profile", "email", "address", "phone"},
 		ServiceCode: "MY_SERVICE_CODE",
 		RequestURI:  "https://example.com:443/production/request_uri",
+		RedirectURI: "https://example.com/production/redirect",
 	}
 	url, err := itsmeClient.GetAuthenticationURL(config)
 	if err != nil {
@@ -71,6 +72,33 @@ func handleRedirect(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(userJSON))
 }
 
+func handleRequest(w http.ResponseWriter, r *http.Request) {
+	itsmeClient, err := getItsmeClient()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err.Error())
+		return
+	}
+	config := itsme.RequestURIConfiguration{
+		URLConfiguration: itsme.URLConfiguration{
+			RedirectURI: "https://example.com/production/redirect",
+			Scopes:      []string{"email", "picture", "profile", "address"},
+			ServiceCode: "MY_SERVICE_CODE",
+		},
+		AcrValue: itsme.ACRAdvanced,
+		Nonce:    "2345yhgfdswertyhgfds",
+		State:    "thisismyriflethisismygun",
+		Claims:   []itsme.Claim{itsme.ClaimCityOfBirth, itsme.ClaimEid, itsme.ClaimDevice, itsme.ClaimNationality, itsme.ClaimPhoto},
+	}
+	jwt, err := itsmeClient.CreateRequestURIPayload(config)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err.Error())
+		return
+	}
+	fmt.Fprint(w, jwt)
+}
+
 func getItsmeClient() (*itsme.Itsme, error) {
 	jwks, err := ioutil.ReadFile("../keys/jwks_private.json")
 	if err != nil {
@@ -78,7 +106,6 @@ func getItsmeClient() (*itsme.Itsme, error) {
 	}
 	settings := itsme.Settings{
 		ClientID:       "my_client_id",
-		RedirectURI:    "https://example.com/production/redirect",
 		PrivateJWKSet:  string(jwks),
 		AppEnvironment: itsme.PRODUCTION,
 	}
@@ -90,5 +117,6 @@ func main() {
 	http.HandleFunc("/production/jwks.json", servePublicKeys)
 	http.HandleFunc("/production/login", buildLoginURL)
 	http.HandleFunc("/production/redirect", handleRedirect)
+	http.HandleFunc("/production/request", handleRequest)
 	log.Fatal(http.ListenAndServe(":8090", nil))
 }
