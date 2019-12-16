@@ -7,6 +7,7 @@ namespace dotnet_core_api.Integrations
     {
         string GetLoginUrl();
         Itsme.User GetUserDetails(string authorization_code);
+        string CreateRequestURIPayload();
     }
     public class ItsmeClient: IItsmeClient
     {
@@ -38,6 +39,28 @@ namespace dotnet_core_api.Integrations
         public Itsme.User GetUserDetails(string authorization_code)
         {
             return _itsmeClient.GetUserDetails(authorization_code);
+        }
+
+        public string CreateRequestURIPayload()
+        {
+            var requestSettings = new Itsme.RequestUriConfiguration();
+            requestSettings.ServiceCode = "MY_SERVICE_CODE";
+            requestSettings.Scopes = new List<Itsme.Scope>(){
+                Itsme.Scope.profile,
+                Itsme.Scope.email,
+                Itsme.Scope.address,
+                Itsme.Scope.phone
+            };
+            requestSettings.RequestUri = "https://example.com:443/production/request_uri";
+            requestSettings.RedirectUri = "https://example.com/production/redirect";
+            requestSettings.AcrValue = Itsme.AcrValue.ACRAdvanced;
+            requestSettings.Nonce = "noncesense";
+            requestSettings.State = "noncesense";
+            requestSettings.Claims = new List<Itsme.Claim>(){
+                Itsme.Claim.ClaimEid,
+                Itsme.Claim.ClaimCityOfBirth
+            };
+            return _itsmeClient.CreateRequestURIPayload(requestSettings);
         }
     }
 }
