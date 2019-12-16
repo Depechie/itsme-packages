@@ -15,9 +15,7 @@ namespace dotnet_core_api
             return new Dictionary<string, string>
             {
                 {"ClientID", "my_client_id"},
-                {"RedirectURI", "https://example.com/production/redirect"},
-                {"PrivateJWKSet", jwks},
-                {"AppEnvironment", ItsmeSettings.Production}
+                {"PrivateJWKSet", jwks}
             };
         }
 

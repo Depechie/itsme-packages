@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace dotnet_core_api.Integrations
 {
@@ -14,9 +15,8 @@ namespace dotnet_core_api.Integrations
         {
             var settings = new Itsme.ItsmeSettings();
             settings.ClientId = config.GetValue<string>("ClientID", "not_found");
-            settings.RedirectUri = config.GetValue<string>("RedirectURI", "not_found");
             settings.PrivateJwkSet = config.GetValue<string>("PrivateJWKSet", "not_found");
-            settings.Environment = config.GetValue<string>("AppEnvironment", "not_found");
+            settings.Environment = Itsme.Environment.production;
             _itsmeClient = new Itsme.Client(settings);
         }
 
@@ -24,8 +24,14 @@ namespace dotnet_core_api.Integrations
         {
             var urlSettings = new Itsme.UrlConfiguration();
             urlSettings.ServiceCode = "MY_SERVICE_CODE";
-            urlSettings.Scopes = new string[]{"profile", "email", "address", "phone"};
+            urlSettings.Scopes = new List<Itsme.Scope>(){
+                Itsme.Scope.profile,
+                Itsme.Scope.email,
+                Itsme.Scope.address,
+                Itsme.Scope.phone
+            };
             urlSettings.RequestUri = "https://example.com:443/production/request_uri";
+            urlSettings.RedirectUri = "https://example.com/production/redirect";
             return _itsmeClient.GetAuthenticationURL(urlSettings);
         }
 
