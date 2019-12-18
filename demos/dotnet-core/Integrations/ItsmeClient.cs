@@ -63,6 +63,12 @@ namespace dotnet_core_api.Integrations
                 Itsme.Claim.ClaimEid,
                 Itsme.Claim.ClaimCityOfBirth
             };
+            requestSettings.AdvancedPaymentTemplate = new Itsme.AdvancedPaymentTemplate();
+            requestSettings.AdvancedPaymentTemplate.Amount = "20";
+            requestSettings.AdvancedPaymentTemplate.Currency = "EUR";
+            requestSettings.AdvancedPaymentTemplate.IBAN = "BE68539007547034";
+            requestSettings.FreeTextTemplate = new Itsme.FreeTextTemplate();
+            requestSettings.FreeTextTemplate.Text = "This is <b>me</b> in bold.</br>This is <i>me</i> in italic.</br>This is <u>me</u> in underline.";
             return _itsmeClient.CreateRequestURIPayload(requestSettings);
         }
 
