@@ -3,7 +3,7 @@ import typing
 from typing import Dict, List, Tuple
 from ctypes import CDLL, c_char_p, Structure
 from os.path import abspath, dirname
-from os import name as operating_system
+from sys import platform as operating_system
 
 
 class Response(Structure):
@@ -97,50 +97,68 @@ class UrlConfiguration(object):
         self.service_code = service_code
 
 
-itsme_lib = None
+class RequestURIConfiguration(object):
+    def __init__(self, url_config: UrlConfiguration, acr_value: str, nonce: str, state: str, claims: List[str]):
+        self.url_config = url_config
+        self.acr_value = acr_value
+        self.nonce = nonce
+        self.state = state
+        self.claims = claims
+
+
 PRODUCTION = 'production'
 SANDBOX = 'e2e'
 
 
 class Client(object):
     ITSME_EXECUTABLE = 'itsme_lib.so'
-    if operating_system == 'nt':
+    if operating_system == 'win32' or operating_system == "cygwin":
         ITSME_EXECUTABLE = 'itsme_lib.dll'
+    if operating_system == 'darwin':
+        ITSME_EXECUTABLE = 'itsme_lib.dylib'
     ITSME_LIB = f'{abspath(dirname(__file__))}/{ITSME_EXECUTABLE}'
 
     def __init__(
         self,
         settings: ItsmeSettings
     ) -> None:
-        global itsme_lib
         # Map the functions so we can call them
-        itsme_lib = CDLL(self.ITSME_LIB)
-        itsme_lib.Init.argtypes = [c_char_p]
-        itsme_lib.Init.restype = c_char_p
-        itsme_lib.GetAuthenticationURL.argtypes = [c_char_p]
-        itsme_lib.GetAuthenticationURL.restype = Response
-        itsme_lib.GetUserDetails.argtypes = [c_char_p]
-        itsme_lib.GetUserDetails.restype = Response
+        self.itsme_lib = CDLL(self.ITSME_LIB)
+        self.itsme_lib.Init.argtypes = [c_char_p]
+        self.itsme_lib.Init.restype = c_char_p
+        self.itsme_lib.GetAuthenticationURL.argtypes = [c_char_p]
+        self.itsme_lib.GetAuthenticationURL.restype = Response
+        self.itsme_lib.GetUserDetails.argtypes = [c_char_p]
+        self.itsme_lib.GetUserDetails.restype = Response
+        self.itsme_lib.CreateRequestURIPayload.argtypes = [c_char_p]
+        self.itsme_lib.CreateRequestURIPayload.restype = Response
         # Initialize the library
         settingsJson = dumps(settings.__dict__)
-        response = itsme_lib.Init(bytes(settingsJson, 'utf-8'))
+        response = self.itsme_lib.Init(bytes(settingsJson, 'utf-8'))
         if response:
             error = Error(response.decode('utf-8'))
             raise ValueError(error.message)
 
     def get_authentication_url(self, config: UrlConfiguration) -> str:
-        global itsme_lib
         url_config = dumps(config.__dict__)
-        response = itsme_lib.GetAuthenticationURL(bytes(url_config, 'utf-8'))
+        response = self.itsme_lib.GetAuthenticationURL(bytes(url_config, 'utf-8'))
         if response.error:
             error = Error(response.error.decode('utf-8'))
             raise ValueError(error.message)
         return response.data.decode('utf-8')
 
     def get_user_details(self, authorization_code: str = None) -> User:
-        global itsme_lib
-        response = itsme_lib.GetUserDetails(bytes(authorization_code, 'utf-8'))
+        response = self.itsme_lib.GetUserDetails(bytes(authorization_code, 'utf-8'))
         if response.error:
             error = Error(response.error.decode('utf-8'))
             raise ValueError(error.message)
         return User(response.data.decode('utf-8'))
+    
+    def create_request_uri_payload(self, request_uri_config: RequestURIConfiguration) -> str:
+        request_uri_config.url_config = request_uri_config.url_config.__dict__
+        request_uri_config_serialized = dumps(request_uri_config.__dict__)
+        response = self.itsme_lib.CreateRequestURIPayload(bytes(request_uri_config_serialized, 'utf-8'))
+        if response.error:
+            error = Error(response.error.decode('utf-8'))
+            raise ValueError(error.message)
+        return response.data.decode('utf-8')

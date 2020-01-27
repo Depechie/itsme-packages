@@ -45,5 +45,16 @@ def redirect():
     return resp
 
 
+@app.route("/production/request")
+def request_uri():
+    url_config = itsme.UrlConfiguration(['profile', 'email', 'address', 'phone'], 'my_service_code', '')
+    config = itsme.RequestURIConfiguration(url_config, 'tag:sixdots.be,2016-06:acr_advanced', 'nonce', 'state', ['tag:sixdots.be,2016-06:claim_city_of_birth', 'tag:sixdots.be,2016-06:claim_nationality', 'tag:sixdots.be,2017-05:claim_device', 'tag:sixdots.be,2016-06:claim_eid', 'tag:sixdots.be,2017-05:claim_photo'])
+    data = _get_itsme_client().create_request_uri_payload(config)
+    resp = Response(data)
+    resp.headers['Content-Type'] = 'text/plain; charset=utf-8'
+
+    return resp
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=8090)
