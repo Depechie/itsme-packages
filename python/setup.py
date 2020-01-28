@@ -4,7 +4,7 @@ from subprocess import call
 
 # Download ITSME libraries
 lib_version = '0.5.0.1570598667'
-version = '0.0.5'
+version = '0.0.6'
 location = './itsme'
 
 if operating_system == 'nt':
