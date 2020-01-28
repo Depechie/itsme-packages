@@ -91,10 +91,17 @@ class ItsmeSettings(object):
 
 
 class UrlConfiguration(object):
-    def __init__(self, scopes: List[str], service_code: str, request_uri: str):
+    def __init__(self, scopes: List[str], service_code: str, redirect_uri: str, request_uri: str):
         self.scopes = scopes
+        self.redirect_uri = redirect_uri
         self.request_uri = request_uri
         self.service_code = service_code
+
+
+class RedirectData(object):
+    def __init__(self, code: str, redirect_uri: str):
+        self.code = code
+        self.redirect_uri = redirect_uri
 
 
 class RequestURIConfiguration(object):
@@ -147,8 +154,9 @@ class Client(object):
             raise ValueError(error.message)
         return response.data.decode('utf-8')
 
-    def get_user_details(self, authorization_code: str = None) -> User:
-        response = self.itsme_lib.GetUserDetails(bytes(authorization_code, 'utf-8'))
+    def get_user_details(self, redirect_data: RedirectData) -> User:
+        serialized_redirect_data = dumps(redirect_data.__dict__)
+        response = self.itsme_lib.GetUserDetails(bytes(serialized_redirect_data, 'utf-8'))
         if response.error:
             error = Error(response.error.decode('utf-8'))
             raise ValueError(error.message)
