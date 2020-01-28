@@ -1,1 +1,1 @@
-from .itsme import Client, User, ItsmeSettings, UrlConfiguration, RequestURIConfiguration, PRODUCTION, SANDBOX
+from .itsme import Client, User, ItsmeSettings, UrlConfiguration, RequestURIConfiguration, RedirectData, PRODUCTION, SANDBOX
