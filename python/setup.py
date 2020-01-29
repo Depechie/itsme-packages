@@ -4,7 +4,7 @@ from subprocess import call
 
 # Download ITSME libraries
 lib_version = '0.5.0.1579093712'
-version = '0.0.6'
+version = '0.0.7'
 location = './itsme'
 
 if operating_system == 'nt':
@@ -22,6 +22,11 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/itsme-api/itsme-api-python',
     packages=find_packages(),
+    # Wheel distributation does not honor Manifest.in for python 3
+    # we have to include binary files here
+    package_data={
+        'itsme': ['itsme_lib.dll', 'itsme_lib.dylib', 'itsme_lib.so'],
+    },
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
