@@ -1,6 +1,5 @@
 from json import loads, dumps
-import typing
-from typing import Dict, List, Tuple
+from typing import List
 from ctypes import CDLL, c_char_p, Structure
 from os.path import abspath, dirname
 from sys import platform as operating_system
@@ -33,18 +32,17 @@ class User(object):
         self.sub = user.get('sub', '')
         self.birthdate = user.get('birthdate', '')
         self.city_of_birth = user.get('city_of_birth', '')
-        if 'eid' in user:
+        self.photo = user.get('photo', '')
+        if (user['eid']):
             self.eid = Eid(user['eid'])
-        if 'address' in user:
+        if (user['address']):
             self.address = Address(user['address'])
-        self.birthdate = user.get('birthdate', '')
-        if 'device' in user:
+        if (user['device']):
             self.address = Device(user['device'])
 
 
 class Address(object):
-    def __init__(self, json):
-        address = loads(json)
+    def __init__(self, address):
         self.country = address.get('country', '')
         self.street_address = address.get('street_address', '')
         self.locality = address.get('locality', '')
@@ -52,8 +50,7 @@ class Address(object):
 
 
 class Eid(object):
-    def __init__(self, json):
-        eid = loads(json)
+    def __init__(self, eid):
         self.eid = eid.get('eid', '')
         self.issuance_locality = eid.get('issuance_locality', '')
         self.national_number = eid.get('national_number', '')
@@ -63,8 +60,7 @@ class Eid(object):
 
 
 class Device(object):
-    def __init__(self, json):
-        device = loads(json)
+    def __init__(self, device):
         self.os = device.get('os', '')
         self.app_name = device.get('appName', '')
         self.app_release = device.get('appRelease', '')
@@ -93,9 +89,9 @@ class ItsmeSettings(object):
 class UrlConfiguration(object):
     def __init__(self, scopes: List[str], service_code: str, redirect_uri: str, request_uri: str):
         self.scopes = scopes
+        self.service_code = service_code
         self.redirect_uri = redirect_uri
         self.request_uri = request_uri
-        self.service_code = service_code
 
 
 class RedirectData(object):
@@ -113,8 +109,27 @@ class RequestURIConfiguration(object):
         self.claims = claims
 
 
+# Itsme Environments
 PRODUCTION = 'production'
 SANDBOX = 'e2e'
+
+# Claims
+# ACRBasic will allow the user to use biometric authentication
+ACRBasic = "tag:sixdots.be,2016-06:acr_basic"
+# ACRAdvanced will force the use of the pinpad
+ACRAdvanced = "tag:sixdots.be,2016-06:acr_advanced"
+# ACRSecured does stuff that's not documented
+ACRSecured = "tag:sixdots.be,2016-06:acr_secured"
+# ClaimEid requests the user's EID data
+ClaimEid = "tag:sixdots.be,2016-06:claim_eid"
+# ClaimCityOfBirth requests the user's city of birth
+ClaimCityOfBirth = "tag:sixdots.be,2016-06:claim_city_of_birth"
+# ClaimNationality requests the user's nationality
+ClaimNationality = "tag:sixdots.be,2016-06:claim_nationality"
+# ClaimDevice requests the user's device information
+ClaimDevice = "tag:sixdots.be,2017-05:claim_device"
+# ClaimPhoto requests the user's picture
+ClaimPhoto = "tag:sixdots.be,2017-05:claim_photo"
 
 
 class Client(object):
@@ -161,7 +176,7 @@ class Client(object):
             error = Error(response.error.decode('utf-8'))
             raise ValueError(error.message)
         return User(response.data.decode('utf-8'))
-    
+
     def create_request_uri_payload(self, request_uri_config: RequestURIConfiguration) -> str:
         request_uri_config.url_config = request_uri_config.url_config.__dict__
         request_uri_config_serialized = dumps(request_uri_config.__dict__)
