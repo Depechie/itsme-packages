@@ -24,6 +24,6 @@ fi
 for EXTENSION in "${EXTENSIONS[@]}"
 do
     FILE_NAME="itsme_lib.${EXTENSION}"
-    curl -o "${LOCATION}/${FILE_NAME}" "https://github.com/itsme-sdk/itsme-golang/releases/download/v${VERSION}/${FILE_NAME}" || exit 1
+    curl -L -f -o "${LOCATION}/${FILE_NAME}" "https://github.com/itsme-sdk/itsme-golang/releases/download/v${VERSION}/${FILE_NAME}" || exit 1
     echo "Successfully downloaded ${FILE_NAME}"
 done
