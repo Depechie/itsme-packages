@@ -5,6 +5,38 @@ from os.path import abspath, dirname
 from sys import platform as operating_system
 
 
+def has_truthy_attr(name: str, d: dict):
+    return bool(name in d and d[name])
+
+
+# Itsme Environments
+class AppEnvironments:
+    PRODUCTION = "production"
+    E2E = "e2e"
+
+
+class ACRValues:
+    # ACRBasic will allow the user to use biometric authentication
+    ACRValues = "tag:sixdots.be,2016-06:acr_basic"
+    # ACRAdvanced will force the use of the pinpad
+    ACRAdvanced = "tag:sixdots.be,2016-06:acr_advanced"
+    # ACRSecured does stuff that's not documented
+    ACRSecured = "tag:sixdots.be,2016-06:acr_secured"
+
+
+class Claims:
+    # Eid requests the user's EID data
+    Eid = "tag:sixdots.be,2016-06:claim_eid"
+    # ClaimCityOfBirth requests the user's city of birth
+    CityOfBirth = "tag:sixdots.be,2016-06:claim_city_of_birth"
+    # Nationality requests the user's nationality
+    Nationality = "tag:sixdots.be,2016-06:claim_nationality"
+    # Device requests the user's device information
+    Device = "tag:sixdots.be,2017-05:claim_device"
+    # Photo requests the user's picture
+    Photo = "tag:sixdots.be,2017-05:claim_photo"
+
+
 class Response(Structure):
     _fields_ = [('data', c_char_p), ('error', c_char_p)]
 
@@ -33,11 +65,11 @@ class User(object):
         self.birthdate = user.get('birthdate', '')
         self.city_of_birth = user.get('city_of_birth', '')
         self.photo = user.get('photo', '')
-        if (user['eid']):
+        if (has_truthy_attr("eid", user)):
             self.eid = Eid(user['eid'])
-        if (user['address']):
+        if (has_truthy_attr("address", user)):
             self.address = Address(user['address'])
-        if (user['device']):
+        if (has_truthy_attr("device", user)):
             self.address = Device(user['device'])
 
 
@@ -107,29 +139,6 @@ class RequestURIConfiguration(object):
         self.nonce = nonce
         self.state = state
         self.claims = claims
-
-
-# Itsme Environments
-PRODUCTION = 'production'
-SANDBOX = 'e2e'
-
-# Claims
-# ACRBasic will allow the user to use biometric authentication
-ACRBasic = "tag:sixdots.be,2016-06:acr_basic"
-# ACRAdvanced will force the use of the pinpad
-ACRAdvanced = "tag:sixdots.be,2016-06:acr_advanced"
-# ACRSecured does stuff that's not documented
-ACRSecured = "tag:sixdots.be,2016-06:acr_secured"
-# ClaimEid requests the user's EID data
-ClaimEid = "tag:sixdots.be,2016-06:claim_eid"
-# ClaimCityOfBirth requests the user's city of birth
-ClaimCityOfBirth = "tag:sixdots.be,2016-06:claim_city_of_birth"
-# ClaimNationality requests the user's nationality
-ClaimNationality = "tag:sixdots.be,2016-06:claim_nationality"
-# ClaimDevice requests the user's device information
-ClaimDevice = "tag:sixdots.be,2017-05:claim_device"
-# ClaimPhoto requests the user's picture
-ClaimPhoto = "tag:sixdots.be,2017-05:claim_photo"
 
 
 class Client(object):
