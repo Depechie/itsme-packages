@@ -17,4 +17,5 @@ matrix:
       on:
         branch: master
       skip_existing: true
+      distributions: "sdist bdist_wheel"
 before_script: chmod +x scripts/dependencies.sh
