@@ -11,7 +11,7 @@ def _get_itsme_client():
         private_jwk_set = jwks_file.read()
     client_id = 'client_id'
     redirect_url = 'https://example.com/redirect'
-    environment = itsme.PRODUCTION
+    environment = itsme.AppEnvironments.PRODUCTION
     settings = itsme.ItsmeSettings(
         client_id, redirect_url, private_jwk_set, environment)
     return itsme.Client(settings)
@@ -56,8 +56,8 @@ def redirect_url():
 def request_uri():
     url_config = itsme.UrlConfiguration(
         ['profile', 'email', 'address', 'phone'], 'service_code', 'https://example.com/redirect', '')
-    config = itsme.RequestURIConfiguration(url_config, itsme.ACRAdvanced, 'nonce', 'state', [
-                                           itsme.ClaimCityOfBirth, itsme.ClaimDevice, itsme.ClaimEid, itsme.ClaimNationality])
+    config = itsme.RequestURIConfiguration(url_config, itsme.ACRValues.ACRAdvanced, 'nonce', 'state', [
+                                           itsme.Claims.CityOfBirth, itsme.Claims.Device, itsme.Claims.Eid, itsme.Claims.Nationality])
     data = _get_itsme_client().create_request_uri_payload(config)
     resp = Response(data)
     resp.headers['Content-Type'] = 'text/plain; charset=utf-8'
