@@ -26,11 +26,13 @@ namespace Itsme
 
         public const string Production = "production";
         public const string Sandbox = "e2e";
+        public const string UAT = "uat";
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Environment {
         production,
-        e2e
+        e2e,
+        uat
     }
 }
