@@ -5,7 +5,7 @@ namespace Itsme
 {
     internal class Wrapper
     {
-        internal const string ITSME_LIB = "itsme_lib.dll";
+        internal const string ITSME_LIB = "itsme_lib";
 
         [DllImport(ITSME_LIB, CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr Init(string settings);

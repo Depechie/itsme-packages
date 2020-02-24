@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeITSMELIB</TargetsForTfmSpecificBuildOutput>
     <PackageId>itsme</PackageId>
     <Authors>Itsme-SDK</Authors>
     <Company>Belgian Mobile ID</Company>
@@ -11,12 +10,9 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="./lib/itsme_lib.dylib" Link="itsme_lib.dilyb" Pack="true" PackagePath="runtimes/osx-x64/native/itsme_lib.dilyb" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="./lib/itsme_lib.so" Link="itsme_lib.so" Pack="true" PackagePath="runtimes/unix-x64/native/itsme_lib.so" />
+    <Content CopyToOutputDirectory="PreserveNewest" Include="./lib/itsme_lib.dll" Link="itsme_lib.dll" Pack="true" PackagePath="runtimes/win-x64/native/itsme_lib.dll" />
   </ItemGroup>
-
-  <Target Name="IncludeITSMELIB">
-    <ItemGroup>
-      <BuildOutputInPackage Include="./lib/itsme_lib.dll" />
-    </ItemGroup>
-  </Target>
 
 </Project>
