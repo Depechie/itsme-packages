@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Itsme
 {
@@ -25,19 +26,28 @@ namespace Itsme
         public FreeTextTemplate FreeTextTemplate { get; set; }
     }
 
+
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Claim {
+        [EnumMember(Value = "tag:sixdots.be,2016-06:claim_eid")]
         ClaimEid,
+        [EnumMember(Value = "tag:sixdots.be,2016-06:claim_city_of_birth")]
         ClaimCityOfBirth,
+        [EnumMember(Value = "tag:sixdots.be,2016-06:claim_nationality")]
         ClaimNationality,
+        [EnumMember(Value = "tag:sixdots.be,2016-06:claim_device")]
         ClaimDevice,
+        [EnumMember(Value = "tag:sixdots.be,2017-05:claim_photo")]
         ClaimPhoto
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AcrValue {
+        [EnumMember(Value = "tag:sixdots.be,2016-06:acr_basic")]
         ACRBasic,
+        [EnumMember(Value = "tag:sixdots.be,2016-06:acr_advanced")]
         ACRAdvanced,
+        [EnumMember(Value = "tag:sixdots.be,2016-06:acr_secured")]
         ACRSecured
     }
 
