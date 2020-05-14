@@ -53,6 +53,9 @@ namespace Itsme
         [JsonProperty(PropertyName = "address")]
         public Address ParsedAddress { get; set; }
 
+        [JsonProperty(PropertyName = "nationality")]
+        public string Nationality { get; set; }
+
         [JsonProperty(PropertyName = "photo")]
         public string Photo { get; set; }
 
