@@ -2,7 +2,7 @@ from os import name as operating_system
 from subprocess import call
 
 # Download ITSME libraries
-lib_version = '0.5.0.1579093712'
+lib_version = '0.5.0.1588665916'
 location = './itsme'
 
 fetch_deps_exit_code = None
